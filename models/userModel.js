@@ -14,6 +14,10 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    secret_question: {
+      type: Object,
+      required: true,
+    },
   },
   {
     timestamps: true,
