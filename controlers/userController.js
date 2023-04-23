@@ -25,14 +25,14 @@ const getUserByID = async (req, res) => {
 };
 //to register a user
 const registerUser = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, secret_question } = req.body;
   const userExists = await UserModel.findOne({ email });
   if (userExists) {
     res.status(400).json({ message: "user already exists" });
   }
   try {
     let hashedPassword = await bcrypt.hash(password, 10);
-    const user = new UserModel({ name, email, password: hashedPassword });
+    const user = new UserModel({ name, email, password: hashedPassword, secret_question });
     await user.save();
     res.status(201).json({ message: "User Registered successfully" });
   } catch (err) {
