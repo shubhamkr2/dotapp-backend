@@ -89,6 +89,62 @@ const deleteUser = async (req, res) => {
   }
 };
 
+//to get a user by its email
+const getUserByEmail = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const userExists = await UserModel.findOne({ email });
+    if (!userExists) {
+      res.status(400).json({ message: "user does not exists" });
+      return;
+    }
+    res.status(200).json({ userId: userExists._id });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Unable to reset the password" });
+  }
+};
+
+//to check security question and answer match or not
+const checkSecretQuestion = async (req, res) => {
+  const { question, answer } = req.body.secret_question;
+  // console.log(question, answer);
+  try {
+    let user = await UserModel.findById({ _id: req.params.id });
+    if (
+      question === user.secret_question.question &&
+      answer === user.secret_question.answer
+    ) {
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+      res.status(200).json({
+        token: token,
+      });
+    } else if (question !== user.secret_question.question) {
+      res.status(500).json({ message: "Wrong question selected" });
+    } else if (answer !== user.secret_question.answer) {
+      res.status(500).json({ message: "Wrong answer" });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Unable to check the security question" });
+  }
+};
+
+//to reset a user password
+const resetUserPassword = async (req, res) => {
+  const { newPassword } = req.body;
+  let hashedNewPassword = await bcrypt.hash(newPassword, 10);
+  try {
+    await UserModel.findByIdAndUpdate(
+      { _id: req.params.id },
+      { password: hashedNewPassword }
+    );
+    res.status(200).json({ message: "Password updated successfully" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Unable to update the password" });
+  }
+};
 module.exports = {
   getUsers,
   getUserByID,
@@ -96,4 +152,7 @@ module.exports = {
   loginUser,
   updateUser,
   deleteUser,
+  getUserByEmail,
+  checkSecretQuestion,
+  resetUserPassword,
 };
