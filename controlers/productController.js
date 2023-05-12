@@ -102,6 +102,7 @@ const addProduct = async (req, res) => {
 
 //to add multiple products
 const addProducts = async (req, res) => {
+  console.log(req.body);
   try {
     const products = req.body;
     for (let i = 0; i < products.length; i++) {
