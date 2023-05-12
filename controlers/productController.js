@@ -100,6 +100,21 @@ const addProduct = async (req, res) => {
   }
 };
 
+//to add multiple products
+const addProducts = async (req, res) => {
+  try {
+    const products = req.body;
+    for (let i = 0; i < products.length; i++) {
+      const product = new ProductModel(products[i]);
+      await product.save();
+    }
+    res.status(201).json({ message: "Products added successfully" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Unable to add products" });
+  }
+};
+
 //to update a product
 const updateProduct = async (req, res) => {
   try {
@@ -126,6 +141,7 @@ module.exports = {
   getProducts,
   getProductByID,
   addProduct,
+  addProducts,
   updateProduct,
   deleteProduct,
 };
