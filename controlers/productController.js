@@ -22,6 +22,8 @@ const getProducts = async (req, res) => {
         sortAs = -1;
       }
     }
+    let AllProducts = await ProductModel.find(req.query);
+    let length = AllProducts.length+1;
     // console.log(isPage, isLimit, isSort);
 
     //if category,page,limit and sort are passed in query
@@ -30,7 +32,7 @@ const getProducts = async (req, res) => {
         .limit(limit)
         .sort({ price: sortAs })
         .skip(limit * (page - 1));
-      res.status(200).json({ data: product });
+      res.status(200).json({ length: length, data: product });
 
       //if only page,limit and sort are passed in query
     } else if (isPage && isLimit && isSort) {
@@ -38,38 +40,38 @@ const getProducts = async (req, res) => {
         .limit(limit)
         .sort({ price: sortAs })
         .skip(limit * (page - 1));
-      res.status(200).json({ data: product });
+      res.status(200).json({ length: length, data: product });
 
       //if only category,page and limit are passed in query
     } else if (category && isPage && isLimit) {
       let product = await ProductModel.find({ category: category })
         .limit(limit)
         .skip(limit * (page - 1));
-      res.status(200).json({ data: product });
+      res.status(200).json({ length: length, data: product });
 
       //if only page and limit are passed in query
     } else if (isPage && isLimit) {
       let product = await ProductModel.find()
         .limit(limit)
         .skip(limit * (page - 1));
-      res.status(200).json({ data: product });
+      res.status(200).json({ length: length, data: product });
 
       //if only category and sort are passed in query
     } else if (category && isSort) {
       let product = await ProductModel.find({ category: category }).sort({
         price: sortAs,
       });
-      res.status(200).json({ data: product });
+      res.status(200).json({ length: length, data: product });
 
       //if only sort is passed in query
     } else if (isSort) {
       let product = await ProductModel.find().sort({ price: sortAs });
-      res.status(200).json({ data: product });
+      res.status(200).json({ length: length, data: product });
 
       //if any conditions are passed in query
     } else {
       let product = await ProductModel.find(req.query);
-      res.status(200).json({ data: product });
+      res.status(200).json({ length: length, data: product });
     }
   } catch (err) {
     console.log(err);
