@@ -22,7 +22,7 @@ const getProducts = async (req, res) => {
         sortAs = -1;
       }
     }
-    let AllProductsLength = await ProductModel.find(req.query).count();
+    let AllProductsLength = await ProductModel.find().count();
     
     // console.log(isPage, isLimit, isSort);
 
