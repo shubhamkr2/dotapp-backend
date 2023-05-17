@@ -3,8 +3,16 @@ const { ProductModel } = require("../models/productModel");
 // Get all products
 const getProducts = async (req, res) => {
   try {
-    const { category, page = 1, limit = 10, sortBy = "asc" } = req.query;
-    const query = category ? { category } : {};
+    const { category, rating, page = 1, limit = 10, sortBy = "asc" } = req.query;
+    const query = {};
+
+    if (category) {
+      query.category = category;
+    }
+
+    if (rating) {
+      query.rating = { $gte: parseFloat(rating) };
+    }
 
     const count = await ProductModel.countDocuments(query);
     const products = await ProductModel.find(query)
