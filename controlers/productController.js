@@ -1,147 +1,81 @@
 const { ProductModel } = require("../models/productModel");
 
-//to get all products
+// Get all products
 const getProducts = async (req, res) => {
   try {
-    //checking these query is requested or not
-    let isCategory = req.query?.category !== undefined;
-    let isPage = req.query?.page !== undefined;
-    let isLimit = req.query?.limit !== undefined;
-    let isSort = req.query?.sortBy !== undefined;
+    const { category, page = 1, limit = 10, sortBy = "asc" } = req.query;
+    const query = category ? { category } : {};
 
-    //Storing requested query
-    let category = req.query.category;
-    let page = +req.query?.page;
-    let limit = +req.query?.limit;
-    let sort = req.query?.sortBy;
-    let sortAs;
-    if (isSort) {
-      if (sort === "asc") {
-        sortAs = 1;
-      } else if (sort === "desc") {
-        sortAs = -1;
-      }
-    }
-    let AllProductsLength = await ProductModel.find({category:category}).count();
-    
-    // console.log(isPage, isLimit, isSort);
+    const count = await ProductModel.countDocuments(query);
+    const products = await ProductModel.find(query)
+      .sort({ price: sortBy === "asc" ? 1 : -1 })
+      .limit(Number(limit))
+      .skip((Number(page) - 1) * Number(limit));
 
-    //if category,page,limit and sort are passed in query
-    if (isCategory && isPage && isLimit && isSort) {
-      let product = await ProductModel.find({ category: category })
-        .limit(limit)
-        .sort({ price: sortAs })
-        .skip(limit * (page - 1));
-
-      res.status(200).json({ count:AllProductsLength, data: product });
-
-      //if only page,limit and sort are passed in query
-    } else if (isPage && isLimit && isSort) {
-      let product = await ProductModel.find()
-        .limit(limit)
-        .sort({ price: sortAs })
-        .skip(limit * (page - 1));
-
-      res.status(200).json({ count:AllProductsLength, data: product });
-
-      //if only category,page and limit are passed in query
-    } else if (category && isPage && isLimit) {
-      let product = await ProductModel.find({ category: category })
-        .limit(limit)
-        .skip(limit * (page - 1));
-
-      res.status(200).json({ count:AllProductsLength, data: product });
-
-      //if only page and limit are passed in query
-    } else if (isPage && isLimit) {
-      let product = await ProductModel.find()
-        .limit(limit)
-        .skip(limit * (page - 1));
-
-      res.status(200).json({ count:AllProductsLength, data: product });
-
-      //if only category and sort are passed in query
-    } else if (category && isSort) {
-      let product = await ProductModel.find({ category: category }).sort({
-        price: sortAs,
-      });
-
-      res.status(200).json({ count:AllProductsLength, data: product });
-
-      //if only sort is passed in query
-    } else if (isSort) {
-      let product = await ProductModel.find().sort({ price: sortAs });
-      res.status(200).json({ count:AllProductsLength, data: product });
-
-      //if any conditions are passed in query
-    } else {
-      let product = await ProductModel.find(req.query);
-      res.status(200).json({ count:AllProductsLength, data: product });
-    }
+    res.status(200).json({ count, data: products });
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Product not found" });
+    console.error(err);
+    res.status(500).json({ message: "Error retrieving products" });
   }
 };
 
-//to get a product by ID
+// Get a product by ID
 const getProductByID = async (req, res) => {
   try {
-    let product = await ProductModel.find({ _id: req.params.id });
+    const product = await ProductModel.findById(req.params.id);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
     res.status(200).json({ data: product });
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Product not found" });
+    console.error(err);
+    res.status(500).json({ message: "Error retrieving product" });
   }
 };
 
-//to add a product
+// Add a product
 const addProduct = async (req, res) => {
   try {
     const product = new ProductModel(req.body);
     await product.save();
     res.status(201).json({ message: "Product added successfully" });
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Unable to add product" });
+    console.error(err);
+    res.status(500).json({ message: "Error adding product" });
   }
 };
 
-//to add multiple products
+// Add multiple products
 const addProducts = async (req, res) => {
-  console.log(req.body);
   try {
     const products = req.body;
-    for (let i = 0; i < products.length; i++) {
-      const product = new ProductModel(products[i]);
-      await product.save();
-    }
+    await ProductModel.insertMany(products);
     res.status(201).json({ message: "Products added successfully" });
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Unable to add products" });
+    console.error(err);
+    res.status(500).json({ message: "Error adding products" });
   }
 };
 
-//to update a product
+// Update a product
 const updateProduct = async (req, res) => {
   try {
-    await ProductModel.findByIdAndUpdate({ _id: req.params.id }, req.body);
-    res.status(200).json({ message: "updated product" });
+    await ProductModel.findByIdAndUpdate(req.params.id, req.body);
+    res.status(200).json({ message: "Product updated successfully" });
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Unable to update the product" });
+    console.error(err);
+    res.status(500).json({ message: "Error updating product" });
   }
 };
 
-//to delete a product
+// Delete a product
 const deleteProduct = async (req, res) => {
   try {
-    await ProductModel.findByIdAndRemove({ _id: req.params.id });
-    res.status(200).json({ message: "deleted product" });
+    await ProductModel.findByIdAndRemove(req.params.id);
+    res.status(200).json({ message: "Product deleted successfully" });
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Unable to update the product" });
+    console.error(err);
+    res.status(500).json({ message: "Error deleting product" });
   }
 };
 
