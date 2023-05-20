@@ -2,8 +2,8 @@ const { ProductModel } = require("../models/productModel");
 
 // Get all products
 const getProducts = async (req, res) => {
-  try {
-    const { category, rating, page = 1, limit = 10, sortBy = "asc" } = req.query;
+    try {
+    const { category, rating, title, page = 1, limit = 10, sortBy = "asc" } = req.query;
     const query = {};
 
     if (category) {
@@ -12,6 +12,10 @@ const getProducts = async (req, res) => {
 
     if (rating) {
       query.rating = { $gte: parseFloat(rating) };
+    }
+
+    if (title) {
+      query.title = { $regex: title, $options: "i" }; // Case-insensitive search
     }
 
     const count = await ProductModel.countDocuments(query);
