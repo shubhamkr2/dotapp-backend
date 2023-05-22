@@ -3,7 +3,7 @@ const { ProductModel } = require("../models/productModel");
 // Get all products
 const getProducts = async (req, res) => {
     try {
-    const { category, rating, title="/", page = 1, limit = 10, sortBy = "asc" } = req.query;
+    const { category, rating, title=", page = 1, limit = 10, sortBy = "asc" } = req.query;
     const query = {};
 
     if (category) {
