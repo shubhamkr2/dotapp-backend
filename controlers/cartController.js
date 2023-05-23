@@ -24,8 +24,9 @@ const getItemByID = async (req, res) => {
 
 //to add a item to cart
 const addItem = async (req, res) => {
+  const { userId, productId, category, title, description, price, image, rating, stock, quantity } = req.body;
   try {
-    const item = new CartModel(req.body);
+    const item = new CartModel({ userId, productId, category, title, description, price, image, rating, stock, quantity });
     await item.save();
     res.status(201).json({ message: "Item added successfully" });
   } catch (err) {
