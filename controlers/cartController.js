@@ -25,13 +25,13 @@ const getItemByID = async (req, res) => {
 //to add a item to cart
 const addItem = async (req, res) => {
   let { userId, productId, category, title, description, price, image, rating, stock, quantity } = req.body;
-  const productExists = await CartModel.findOne({ productId });
-  if(productExists && productExists.userId===userId){
-    quantity=quantity+productExists.quantity;
-    await CartModel.findByIdAndUpdate({ _id: productId }, quantity);
-    res.status(200).json({ message: "updated item" });
-  }
   try {
+    const productExists = await CartModel.findOne({ productId });
+    if (productExists && productExists.userId === userId) {
+      quantity = quantity + productExists.quantity;
+      await CartModel.findByIdAndUpdate({ _id: productExists._id }, { quantity });
+      return res.status(200).json({ message: "Updated item quantity" });
+    }
     const item = new CartModel({ userId, productId, category, title, description, price, image, rating, stock, quantity });
     await item.save();
     res.status(201).json({ message: "Item added successfully" });
@@ -40,6 +40,7 @@ const addItem = async (req, res) => {
     res.status(500).json({ message: "Unable to add item" });
   }
 };
+
 
 //to update a item
 const updateItem = async (req, res) => {
