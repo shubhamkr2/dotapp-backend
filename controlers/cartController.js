@@ -27,7 +27,7 @@ const addItem = async (req, res) => {
   const { userId, productId, category, title, description, price, image, rating, stock, quantity } = req.body;
   const productExists = await CartModel.findOne({ productId });
   if(productExists && productExists.userId===userId){
-    quantity=+quantity+(+productExists.quantity);
+    quantity=quantity+productExists.quantity;
   }
   try {
     const item = new CartModel({ userId, productId, category, title, description, price, image, rating, stock, quantity });
