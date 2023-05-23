@@ -28,6 +28,8 @@ const addItem = async (req, res) => {
   const productExists = await CartModel.findOne({ productId });
   if(productExists && productExists.userId===userId){
     quantity=quantity+productExists.quantity;
+    await CartModel.findByIdAndUpdate({ _id: productId }, quantity);
+    res.status(200).json({ message: "updated item" });
   }
   try {
     const item = new CartModel({ userId, productId, category, title, description, price, image, rating, stock, quantity });
