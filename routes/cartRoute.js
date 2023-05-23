@@ -1,16 +1,15 @@
 const { Router } = require("express");
-const { authenticate } = require("../middleware/authMiddleware");
 const {
   getCartItems,
   getItemByID,
   addItem,
   updateItem,
   deleteItem,
-} = require("../controllers/cartController");
+} = require("../controlers/cartController");
+const { authenticate } = require("../middlewares/authMiddleware");
 
 const cartRoute = Router();
 
-// Apply the authenticate middleware to the protected routes
 cartRoute.get("/", authenticate, getCartItems);
 cartRoute.get("/:id", authenticate, getItemByID);
 cartRoute.post("/", authenticate, addItem);
