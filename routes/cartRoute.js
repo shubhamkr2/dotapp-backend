@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { authenticate } = require("../middleware/authenticate");
+const { authenticate } = require("../middleware/authMiddleware");
 const {
   getCartItems,
   getItemByID,
