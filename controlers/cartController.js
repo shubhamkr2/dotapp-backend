@@ -28,7 +28,7 @@ const addItem = async (req, res) => {
   try {
     const productExists = await CartModel.findOne({ productId });
     if (productExists && productExists.userId === userId) {
-      const updatedQuantity = productExists.quantity + quantity;
+      const updatedQuantity = +productExists.quantity + (+quantity);
       if (updatedQuantity <= 5) {
         await CartModel.findByIdAndUpdate({ _id: productExists._id }, { quantity: updatedQuantity });
         return res.status(200).json({ message: "Updated item quantity" });
