@@ -28,9 +28,13 @@ const addItem = async (req, res) => {
   try {
     const productExists = await CartModel.findOne({ productId });
     if (productExists && productExists.userId === userId) {
-      quantity = +quantity + (+productExists.quantity);
-      await CartModel.findByIdAndUpdate({ _id: productExists._id }, { quantity });
-      return res.status(200).json({ message: "Updated item quantity" });
+      const updatedQuantity = productExists.quantity + quantity;
+      if (updatedQuantity <= 5) {
+        await CartModel.findByIdAndUpdate({ _id: productExists._id }, { quantity: updatedQuantity });
+        return res.status(200).json({ message: "Updated item quantity" });
+      } else {
+        return res.status(400).json({ message: "Quantity limit exceeded" });
+      }
     }
     const item = new CartModel({ userId, productId, category, title, description, price, image, rating, stock, quantity });
     await item.save();
@@ -40,6 +44,7 @@ const addItem = async (req, res) => {
     res.status(500).json({ message: "Unable to add item" });
   }
 };
+
 
 
 //to update a item
