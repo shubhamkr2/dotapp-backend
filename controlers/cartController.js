@@ -24,7 +24,7 @@ const getItemByID = async (req, res) => {
 
 //to add a item to cart
 const addItem = async (req, res) => {
-  let { userId, productId, category, title, description, price, image, rating, stock, quantity } = req.body;
+  let { userId, productId, category, title, description, price, image, rating, stock, +quantity } = req.body;
   try {
     const productExists = await CartModel.findOne({ productId });
     if (productExists && productExists.userId === userId) {
