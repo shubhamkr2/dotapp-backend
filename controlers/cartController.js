@@ -2,8 +2,9 @@ const { CartModel } = require("../models/cartModel");
 
 //to get all cart items
 const getCartItems = async (req, res) => {
+  const {userId} = req.body;
   try {
-    let items = await CartModel.find(req.query);
+    let items = await CartModel.find({userId});
     res.status(200).json({ data: items });
   } catch (err) {
     console.log(err);
