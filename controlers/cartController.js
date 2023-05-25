@@ -70,7 +70,7 @@ const addItem = async (req, res) => {
 //to update a item
 const updateItem = async (req, res) => {
   try {
-    await CartModel.findByIdAndUpdate({ _id: req.params.id }, req.body);
+    await CartModel.findByIdAndUpdate({ _id: req.params.id }, quantity:req.body.quantity);
     res.status(200).json({ message: "updated item" });
   } catch (err) {
     console.log(err);
