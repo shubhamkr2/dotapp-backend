@@ -23,28 +23,47 @@ const getItemByID = async (req, res) => {
   }
 };
 
-//to add a item to cart
 const addItem = async (req, res) => {
-  let { userId, productId, category, title, description, price, image, rating, stock, quantity } = req.body;
+  const { userId, productId, quantity } = req.body;
+
   try {
-    const productExists = await CartModel.findOne({ productId });
-    if (productExists && productExists.userId === userId) {
-      const updatedQuantity = +productExists.quantity + (+quantity);
+    let cartItem = await CartModel.findOne({ userId, productId });
+
+    if (cartItem) {
+      const updatedQuantity = cartItem.quantity + quantity;
+
       if (updatedQuantity <= 5) {
-        await CartModel.findByIdAndUpdate({ _id: productExists._id }, { quantity: updatedQuantity });
+        cartItem.quantity = updatedQuantity;
+        await cartItem.save();
         return res.status(200).json({ message: "Updated item quantity" });
       } else {
         return res.status(400).json({ message: "Quantity limit exceeded" });
       }
+    } else {
+      const { category, title, description, price, image, rating, stock } = req.body;
+
+      const newItem = new CartModel({
+        userId,
+        productId,
+        category,
+        title,
+        description,
+        price,
+        image,
+        rating,
+        stock,
+        quantity,
+      });
+
+      await newItem.save();
+      return res.status(201).json({ message: "Item added successfully" });
     }
-    const item = new CartModel({ userId, productId, category, title, description, price, image, rating, stock, quantity });
-    await item.save();
-    res.status(201).json({ message: "Item added successfully" });
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: "Unable to add item" });
+    return res.status(500).json({ message: "Unable to add item" });
   }
 };
+
 
 
 
