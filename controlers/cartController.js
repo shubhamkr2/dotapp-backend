@@ -69,7 +69,6 @@ const addItem = async (req, res) => {
 
 //to update a item
 const updateItem = async (req, res) => {
-  const { quantity } = req.body.quantity;
   try {
     await CartModel.findByIdAndUpdate({ _id: req.params.id }, req.body );
     res.status(200).json({ message: "updated item" });
