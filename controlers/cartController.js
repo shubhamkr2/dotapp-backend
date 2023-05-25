@@ -30,7 +30,7 @@ const addItem = async (req, res) => {
     let cartItem = await CartModel.findOne({ userId, productId });
 
     if (cartItem) {
-      const updatedQuantity = cartItem.quantity + quantity;
+      const updatedQuantity = +cartItem.quantity + (+quantity);
 
       if (updatedQuantity <= 5) {
         cartItem.quantity = updatedQuantity;
