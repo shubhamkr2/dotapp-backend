@@ -7,7 +7,7 @@ const { productRoute } = require("./routes/productRoute");
 const { cartRoute } = require("./routes/cartRoute");
 require("dotenv").config();
 
-app.use(cors({ origin: "*" }));
+app.use(cors());
 app.use(express.json());
 
 app.use("/users", userRoute);
