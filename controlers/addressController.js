@@ -1,14 +1,14 @@
 const { AddressModel } = require("../models/addressModel");
 
 //to get all address
-const getCartItems = async (req, res) => {
+const getAddress = async (req, res) => {
   const {userId} = req.body;
   try {
-    let items = await CartModel.find({userId});
-    res.status(200).json({ data: items });
+    let address = await AddressModel.find({userId});
+    res.status(200).json({ data: address });
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: "Items not found" });
+    res.status(500).json({ message: "Address not found" });
   }
 };
 
