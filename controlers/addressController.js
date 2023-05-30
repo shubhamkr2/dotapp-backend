@@ -23,69 +23,54 @@ const getAddressByID = async (req, res) => {
   }
 };
 
-const addItem = async (req, res) => {
-  const { userId, productId, quantity } = req.body;
+const addAddress = async (req, res) => {
 
   try {
-    let cartItem = await AddressModel.findOne({ userId, productId });
+      const { name, number, flat, area, landmark, pincode, city, state, userId } = req.body;
 
-    if (cartItem) {
-      const updatedQuantity = +cartItem.quantity + (+quantity);
-
-      if (updatedQuantity <= 5) {
-        cartItem.quantity = updatedQuantity;
-        await cartItem.save();
-        return res.status(200).json({ message: "Updated item quantity" });
-      } else {
-        return res.status(400).json({ message: "Quantity limit exceeded" });
-      }
-    } else {
-      const { category, title, description, price, image, rating, stock } = req.body;
-
-      const newItem = new AddressModel({
+      const newAddress = new AddressModel({
         userId,
-        productId,
-        category,
-        title,
-        description,
-        price,
-        image,
-        rating,
-        stock,
-        quantity,
+        name,
+        number,
+        flat,
+        area,
+        landmark,
+        pincode,
+        city,
+        state,
       });
 
-      await newItem.save();
-      return res.status(201).json({ message: "Item added successfully" });
+      await newAddress.save();
+      return res.status(201).json({ message: "Address added successfully" });
     }
   } catch (err) {
     console.log(err);
-    return res.status(500).json({ message: "Unable to add item" });
+    return res.status(500).json({ message: "Unable to add address" });
   }
 };
 
 
 
 
-//to update a item
-const updateItem = async (req, res) => {
+//to update a address
+const updateAddress = async (req, res) => {
   try {
     await AddressModel.findByIdAndUpdate({ _id: req.params.id }, req.body );
-    res.status(200).json({ message: "updated item" });
+    res.status(200).json({ message: "updated address" });
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: "Unable to update the item" });
+    res.status(500).json({ message: "Unable to update the address" });
   }
 };
 
-//to delete a item
-const deleteItem = async (req, res) => {
+//to delete a address
+const deleteAddress = async (req, res) => {
   try {
     await AddressModel.findByIdAndRemove({ _id: req.params.id });
-    res.status(200).json({ message: "deleted item" });
+    res.status(200).json({ message: "deleted address" });
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: "Unable to update the item" });
+    res.status(500).json({ message: "Unable to update the address" });
   }
 };
 module.exports = {
