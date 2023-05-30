@@ -89,9 +89,9 @@ const deleteItem = async (req, res) => {
   }
 };
 module.exports = {
-  getCartItems,
-  getItemByID,
-  addItem,
-  updateItem,
-  deleteItem,
+  getAddress,
+  getAddressByID,
+  addAddress,
+  updateAddress,
+  deleteAddress,
 };
