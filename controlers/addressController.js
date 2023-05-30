@@ -42,7 +42,6 @@ const addAddress = async (req, res) => {
 
       await newAddress.save();
       return res.status(201).json({ message: "Address added successfully" });
-    }
   } catch (err) {
     console.log(err);
     return res.status(500).json({ message: "Unable to add address" });
