@@ -4,7 +4,7 @@ const { CartModel } = require("../models/cartModel");
 const getCartItems = async (req, res) => {
   const {userId} = req.body;
   try {
-    let items = await CartModel.find({userId});
+    let items = await CartModel.find({userId}).maxTimeMS(20000);
     res.status(200).json({ data: items });
   } catch (err) {
     console.log(err);
@@ -15,7 +15,7 @@ const getCartItems = async (req, res) => {
 //to get a item by ID
 const getItemByID = async (req, res) => {
   try {
-    let item = await CartModel.find({ _id: req.params.id });
+    let item = await CartModel.find({ _id: req.params.id }).maxTimeMS(20000);
     res.status(200).json({ data: item });
   } catch (err) {
     console.log(err);
