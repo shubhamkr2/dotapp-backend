@@ -4,7 +4,7 @@ const { AddressModel } = require("../models/addressModel");
 const getAddress = async (req, res) => {
   const {userId} = req.body;
   try {
-    let address = await AddressModel.find({userId});
+    let address = await AddressModel.find({userId}).maxTimeMS(20000);
     res.status(200).json({ data: address });
   } catch (err) {
     console.log(err);
