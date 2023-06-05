@@ -10,10 +10,10 @@ const { authenticate } = require("../middlewares/authMiddleware");
 
 const orderRoute = Router();
 
-orderRoute.get("/", getOrders);
-orderRoute.get("/:id", getOrderByID);
-orderRoute.post("/", addOrder);
-orderRoute.put("/:id", updateOrder);
-orderRoute.delete("/:id", deleteOrder);
+orderRoute.get("/", authenticate, getOrders);
+orderRoute.get("/:id", authenticate, getOrderByID);
+orderRoute.post("/", authenticate, addOrder);
+orderRoute.put("/:id", authenticate, updateOrder);
+orderRoute.delete("/:id", authenticate, deleteOrder);
 
 module.exports = { orderRoute };
