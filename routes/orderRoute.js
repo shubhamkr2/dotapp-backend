@@ -6,6 +6,7 @@ const {
   updateOrder,
   deleteOrder,
 } = require("../controlers/orderController");
+const { authenticate } = require("../middlewares/authMiddleware");
 
 const orderRoute = Router();
 
