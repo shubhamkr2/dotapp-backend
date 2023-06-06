@@ -1,38 +1,54 @@
 const mongoose = require("mongoose");
 
 const orderSchema = mongoose.Schema({
-  category: {
-    type: String,
+  orderId: {
+    type: string,
     required: true,
   },
-  title: {
-    type: String,
-    required: true,
-  },
-  description: {
-    type: String,
-    required: true,
-  },
-  price: {
-    type: Number,
-    required: true,
-  },
-  image: {
-    type: Array,
-    required: true,
-  },
-  rating: {
-    type: Number,
-    required: true,
-  },
-  stock: {
-    type: Boolean,
-    required: true,
-  },
-  quantity: {
-    type: Number,
-    required: true,
-  },
+  products: [
+    {
+      category: {
+        type: String,
+        required: true,
+      },
+      title: {
+        type: String,
+        required: true,
+      },
+      description: {
+        type: Array,
+        required: true,
+      },
+      price: {
+        type: Number,
+        required: true,
+      },
+      image: {
+        type: Array,
+        required: true,
+      },
+      rating: {
+        type: Number,
+        required: true,
+      },
+      stock: {
+        type: Boolean,
+        required: true,
+      },
+      quantity: {
+        type: Number,
+        required: true,
+      },
+      productId: {
+        type: String,
+        required: true,
+      },
+      userId: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
   userId: {
     type: String,
     required: true,
