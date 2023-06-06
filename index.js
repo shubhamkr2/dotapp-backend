@@ -9,8 +9,8 @@ const { addressRoute } = require("./routes/addressRoute");
 const { orderRoute } = require("./routes/orderRoute");
 require("dotenv").config();
 
-app.use(cors({ origin: '*' }));
 app.use(express.json());
+app.use(cors({ origin: '*' }));
 
 app.use("/users", userRoute);
 app.use("/products", productRoute);
