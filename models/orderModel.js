@@ -45,7 +45,6 @@ const orderSchema = mongoose.Schema({
       },
       userId: {
         type: String,
-        required: true,
       },
     },
   ],
