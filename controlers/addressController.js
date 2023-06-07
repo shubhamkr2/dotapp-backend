@@ -2,15 +2,19 @@ const { AddressModel } = require("../models/addressModel");
 
 //to get all address
 const getAddress = async (req, res) => {
-  const {userId} = req.body;
+  const { userId } = req.body;
   try {
-    let address = await AddressModel.find({userId}).maxTimeMS(20000);
-    res.status(200).json({ data: address });
+    let address = await AddressModel.find({ userId }).maxTimeMS(20000);
+    if (address.length === 0) {
+      return res.status(404).json({ message: "No addresses found for the user" });
+    }
+    return res.status(200).json({ data: address });
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: "Address not found" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
+
 
 //to get a address by ID
 const getAddressByID = async (req, res) => {
