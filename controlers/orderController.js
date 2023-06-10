@@ -2,6 +2,7 @@ const { OrderModel } = require("../models/orderModel");
 
 //to get all orders
 const getOrders = async (req, res) => {
+  console.log(req.body)
   try {
     let orders = await OrderModel.find(req.query);
     res.status(200).json({ data: orders });
