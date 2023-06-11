@@ -85,7 +85,20 @@ const deleteItem = async (req, res) => {
     res.status(200).json({ message: "deleted item" });
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: "Unable to update the item" });
+    res.status(500).json({ message: "Unable to delete the item" });
+  }
+};
+
+
+//to delete many items
+const deleteAllItems = async (req, res) => {
+  const { Id } = req.body;
+  try {
+    let result = await CartModel.deleteMany({userId: Id});
+    res.status(200).json({ data: result, message: "removed all items });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Unable to delete the items" });
   }
 };
 module.exports = {
@@ -94,4 +107,5 @@ module.exports = {
   addItem,
   updateItem,
   deleteItem,
+  deleteAllItems,
 };
