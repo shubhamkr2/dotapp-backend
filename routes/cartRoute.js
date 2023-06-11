@@ -15,5 +15,6 @@ cartRoute.get("/:id", authenticate, getItemByID);
 cartRoute.post("/", authenticate, addItem);
 cartRoute.put("/:id", authenticate, updateItem);
 cartRoute.delete("/:id", authenticate, deleteItem);
+cartRoute.delete("all/:id", authenticate, deleteItem);
 
 module.exports = { cartRoute };
