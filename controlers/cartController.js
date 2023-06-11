@@ -95,7 +95,7 @@ const deleteAllItems = async (req, res) => {
   const { userId } = req.body;
   try {
     let result = await CartModel.deleteMany({userId: userId});
-    res.status(200).json({ data: result, message: "removed all items });
+    res.status(200).json({ data: result, message: "removed all items" });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Unable to delete the items" });
