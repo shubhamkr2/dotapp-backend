@@ -93,6 +93,7 @@ const deleteItem = async (req, res) => {
 //to delete many items
 const deleteAllItems = async (req, res) => {
   const { userId } = req.body;
+  console.log(userId);
   try {
     let result = await CartModel.deleteMany({ userId: userId });
     res.status(200).json({ data: result, message: "removed all items" });
