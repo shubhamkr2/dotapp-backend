@@ -40,7 +40,7 @@ const addItem = async (req, res) => {
         return res.status(400).json({ message: "Quantity limit exceeded" });
       }
     } else {
-      const { category, title, description, price, image, rating, stock } = req.body;
+      const { category, title, description, price, images, rating, stock } = req.body;
 
       const newItem = new CartModel({
         userId,
@@ -49,7 +49,7 @@ const addItem = async (req, res) => {
         title,
         description,
         price,
-        image,
+        images,
         rating,
         stock,
         quantity,
