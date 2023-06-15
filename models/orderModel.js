@@ -5,8 +5,12 @@ const orderSchema = mongoose.Schema({
     type: Array,
     required:true,
   },
-  address:{
+  address: {
     type: Object,
+    required: true,
+  },
+  totalamt: {
+    type: Number,
     required: true,
   },
   userId: {
