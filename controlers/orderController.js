@@ -2,15 +2,15 @@ const { OrderModel } = require("../models/orderModel");
 
 //to get all orders
 const getOrders = async (req, res) => {
-  console.log(req.body)
   try {
-    let orders = await OrderModel.find(req.query);
+    let orders = await OrderModel.find(req.query).sort({ createdAt: -1 });
     res.status(200).json({ data: orders });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Order not found" });
   }
 };
+
 
 //to get a order by ID
 const getOrderByID = async (req, res) => {
